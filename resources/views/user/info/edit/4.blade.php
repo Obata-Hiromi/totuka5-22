@@ -7,7 +7,7 @@
     <h2>基本情報</h2>
 
     【氏名】
-    <input type="text" class="form-control" name="info[you1]" value="">
+    <input type="text" class="form-control" name="info[you1]" value="{{$base->info()->info['you1']}}">
     <div>【性別】
         <div class="form-check form-check-radio">
             <label class="form-check-label">
@@ -28,33 +28,33 @@
         <h4>【生年月日】</h4>
         <div>
             <div class="form-group">
-                <input type="number" placeholder="year" class="form-control" name="info[you3]" value="">年
+                <input type="number" placeholder="year" class="form-control" name="info[you3]" value="{{$base->info()->info['you3']}}">年
             </div>
             <div class="form-group">
-                <input type="number" placeholder="month" class="form-control" name="info[you4]" value="">月
+                <input type="number" placeholder="month" class="form-control" name="info[you4]" value="{{$base->info()->info['you4']}}">月
             </div>
             <div class="form-group">
-                <input type="number" placeholder="day" class="form-control" name="info[you5]" value="">日
+                <input type="number" placeholder="day" class="form-control" name="info[you5]" value="{{$base->info()->info['you5']}}">日
 
 
             </div>
         </div>【住所】
         <div class="form-group">
             <label for="input">郵便番号</label>
-            <input type="text" class="form-control" name="info[you6]" value="">
+            <input type="text" class="form-control" name="info[you6]" value="{{$base->info()->info['you6']}}">
         </div>
         <div class="form-group">
             <label for="input">番地まで</label>
-            <input type="text" class="form-control" name="info[you7]" value="">
+            <input type="text" class="form-control" name="info[you7]" value="{{$base->info()->info['you7']}}">
         </div>
         <div class="form-group">
             <label for="input">建物名・部屋番号</label>
-            <input type="text" class="form-control" name="info[you8]" value="">
+            <input type="text" class="form-control" name="info[you8]" value="{{$base->info()->info['you8']}}">
         </div>
     【電話番号】
         <div>
 
-            <input type="tel" class="form-control" name="info[you9]" value="">
+            <input type="tel" class="form-control" name="info[you9]" value="{{$base->info()->info['you9']}}">
 
         </div>
         【位置情報サービス】
@@ -96,7 +96,7 @@
             </label>
         </div>【最寄りの避難場所】
     </div>
-    <input type="text" class="form-control" name="info[home2]" value="">
+    <input type="text" class="form-control" name="info[home2]" value="{{$base->info()->info['home2']}}">
 </div>
      
 <div class="form-group mb-0 mt-3">
