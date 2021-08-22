@@ -2,36 +2,117 @@
     @csrf
     @method('PUT')
 
+    <div class="form-check my-5">
+        <label class="form-check-label">
+            <input type="hidden" name="info[is_long]" value="1">
+            <input class="form-check-input" type="checkbox" name="info[is_long]" value="0" @if(!$base->info()->info["is_long"]) checked @endif>
+            短縮バージョンを使う
+            <span class="form-check-sign">
+                <span class="check"></span>
+            </span>
+        </label>
+    </div>
 
-    <div id="questionnaire_body">
+    <script type="module">
+    $(document).ready(function() {
+        if($('input[name="info[is_long]"][type="checkbox"]').prop('checked')){
+            $('#short_version').removeClass('d-none');
+            $('#long_version').addClass('d-none');
+        }else{
+            $('#short_version').addClass('d-none');
+            $('#long_version').removeClass('d-none');
+        }
+        
+        $('input[name="info[is_long]"][type="checkbox"]').change(function() {
+            if($(this).prop('checked')){
+                $('#short_version').removeClass('d-none');
+                $('#long_version').addClass('d-none');
+            }else{
+                $('#short_version').addClass('d-none');
+                $('#long_version').removeClass('d-none');
+            }
+        });
+    });
+    </script>
+
+    <div id="short_version">
+        <label>体調</label>
+        <div>
+            <div class="form-check form-check-radio">
+            <label class="form-check-label">
+                <input class="form-check-input btn-check" type="radio" name="info[feeling]" value="良い"> 良い
+                <span class="circle">
+                    <span class="check"></span>
+                </span>
+            </label>
+            </div>
+
+            <div class="form-check form-check-radio">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="info[feeling]" value="普通" checked> 普通
+                <span class="circle">
+                    <span class="check"></span>
+                </span>
+            </label>
+            </div>
+
+            <div class="form-check form-check-radio">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="info[feeling]" value="悪い"> 悪い
+                <span class="circle">
+                    <span class="check"></span>
+                </span>
+            </label>
+            </div>
+        </div>
+
+        <div class="form-group mt-4">
+            <label for="comment_short">コメント</label>
+            <textarea class="form-control" id="comment_short" name="info[comment]" rows="5"></textarea>
+        </div>
+
+        <div class="form-group mb-0 mt-3">
+            <button type="submit" class="btn btn-primary btn-block">
+                回答
+            </button>
+        </div>
+    </div>
+</form>
+
+<form method="POST" action="{{ route('user.questionnaire.update',[$base->id]) }}">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="info[is_long]" value="1">
+
+    <div id="long_version">
 
 
                     <div class="card-header card-header-primary mx-0 my-4">
                         <div class="nav-tabs-navigation">
                             <div class="nav-tabs-wrapper">
                                 <ul class="nav nav-tabs" data-tabs="tabs">
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('feeling', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4 active" href="#1" id="t1" data-toggle="tab">調子</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('syokuyoku', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#2" id='t2' data-toggle="tab">食欲</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('otuzi', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#3" id="t3" data-toggle="tab">お通じ</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('taion', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#4" id="t4" data-toggle="tab">体温</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('taiju', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#5" id="t5" data-toggle="tab">体重</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('ketuatu', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#6" id="t6" data-toggle="tab">血圧</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('warui_bui', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#7" id="t7" data-toggle="tab">症状</a>
                                         </li>
-                                        <li class="nav-item mx-auto">
+                                        <li class="nav-item mx-auto @if(in_array('comment', $info->info['not_use_items'])) d-none @endif">
                                             <a class="nav-link h4" href="#8" id="t8" data-toggle="tab">コメント</a>
                                         </li>
                                         <li class="nav-item mx-auto">
@@ -49,7 +130,7 @@
 
 
 
-                    <div class="tab-pane active" id="1">
+                    <div class="tab-pane active @if(in_array('feeling', $info->info['not_use_items'])) d-none @endif" id="1">
                         <span class="h2">調子</span>
                         <input type="hidden" name="info[feeling]" value="">
                         <div class="form-check">
@@ -72,7 +153,7 @@
 
 
 
-                    <div class="tab-pane" id="2"> <!質問２>
+                    <div class="tab-pane @if(in_array('syokuyoku', $info->info['not_use_items'])) d-none @endif" id="2"> <!質問２>
                         <span class=h2>食欲</span>
                         <input type="hidden" name="info[syokuyoku]" value="">
                         <div class="form-check">
@@ -97,7 +178,7 @@
                     </div>
 
 
-                    <div class="tab-pane" id="3"><!質問３>
+                    <div class="tab-pane @if(in_array('otuzi', $info->info['not_use_items'])) d-none @endif" id="3"><!質問３>
                         <span class=h2>お通じ</span>
                         <input type="hidden" name="info[otuzi]" value="">
                         <div class="form-check">
@@ -126,9 +207,20 @@
 
 
 
-                    <div class="tab-pane" id="4"><!質問4>
+                    <div class="tab-pane @if(in_array('taion', $info->info['not_use_items'])) d-none @endif" id="4"><!質問4>
                         <span class=h2>体温（℃）</span>
-                        <input type = "number" id = "taion" name = "info[taion]" step="0.1" class="btn btn-outline-secondary form-control" value="{{$base->info()->info['taion']}}">
+                        <select id = "taion" name = "info[taion]" class="btn btn-outline-secondary form-control" value="{{$base->info()->info['taion']}}">
+                            <option value="">測っていない</option>
+                            <option value="35.5℃より低い">35.5℃より低い</option>
+                            <option value="35.5~36.0">35.5~36.0</option>
+                            <option value="36.1~36.5">36.1~36.5</option>
+                            <option value="36.6~37.0">36.6~37.0</option>
+                            <option value="37.1~37.5">37.1~37.5</option>
+                            <option value="37.6~38.0">37.6~38.0</option>
+                            <option value="38.1~38.5">38.1~38.5</option>
+                            <option value="38.6~39.0">38.6~39.0</option>
+                            <option value="39.0℃より高い">39.0℃より高い</option>
+                        </select>
                         
                         <div>
                             <button type="button" class="btn btn-primary change_prev_pill_tab mt-4">前の質問へ</button>
@@ -140,7 +232,7 @@
 
 
 
-                    <div class="tab-pane" id="5"><!質問5>
+                    <div class="tab-pane @if(in_array('taiju', $info->info['not_use_items'])) d-none @endif" id="5"><!質問5>
                         <span class=h2>体重（kg）</span>
                         <input type = "number" name = "info[taiju]" id="taiju" class="btn btn-outline-secondary form-control" value="{{$base->info()->info['taiju']}}">
                         
@@ -153,7 +245,7 @@
 
 
 
-                    <div class="tab-pane" id="6"><!質問6>
+                    <div class="tab-pane @if(in_array('ketuatu', $info->info['not_use_items'])) d-none @endif" id="6"><!質問6>
                         <span class=h2>血圧（mmHg）</span>
                         <input type = "number" name = "info[ketuatu_saikou]" id="ketuatu_saikou" class="btn btn-outline-secondary form-control" placeholder="最高" value="{{$base->info()->info['ketuatu_saikou']}}">
                         <input type = "number" name = "info[ketuatu_saitei]" id="ketuatu_saitei" class="btn btn-outline-secondary form-control" placeholder="最低" value="{{$base->info()->info['ketuatu_saitei']}}">
@@ -166,7 +258,7 @@
                     </div>
 
 
-                    <div class="tab-pane" id="7"><!質問7>
+                    <div class="tab-pane @if(in_array('warui_bui', $info->info['not_use_items'])) d-none @endif" id="7"><!質問7>
                         <span class=h2>症状</span>
                         <input type="hidden" name="info[warui_bui][]" value="">
                         <div class="form-check">
@@ -218,7 +310,7 @@
                     </div>
 
 
-                    <div class="tab-pane" id="8">
+                    <div class="tab-pane @if(in_array('comment', $info->info['not_use_items'])) d-none @endif" id="8">
                         <p class="h2">コメント</p>
                         <textarea class="form-control" id="comment" name="info[comment]" rows="5"></textarea>
                         
@@ -245,8 +337,16 @@
 
                         <script type="module">
                         $(function(){
-                            
-                            $('#questionnaire_body input').change(function(){
+                            for(var check = 1;check < 9;check++){
+                                var activeid = document.getElementById(check);
+                                var d_none = activeid.classList.contains("d-none");
+                                if(d_none == false){
+                                    activeid.classList.add("active");
+                                    break;
+                                }
+                            };
+
+                            $('#long_version input').change(function(){
                             var jstyousi = $('[name="info[feeling]"]:checked').val();//1
                             var idtyousi = document.getElementById("tyousi_out");
                             idtyousi.innerHTML = jstyousi;
@@ -297,11 +397,11 @@
                     <script type="module">
                         $(function(){
                             $('.change_next_pill_tab').click(function(){
-                                $(window).scrollTop($('#questionnaire_body').offset().top);
+                                $(window).scrollTop($('#long_version').offset().top);
                                 $(".nav-link[href='#"+$(this).closest('.tab-pane').attr('id')+"']").closest('.nav-item').next('.nav-item').find('.nav-link').tab('show');
                             });
                             $('.change_prev_pill_tab').click(function(){
-                                $(window).scrollTop($('#questionnaire_body').offset().top);
+                                $(window).scrollTop($('#long_version').offset().top);
                                 $(".nav-link[href='#"+$(this).closest('.tab-pane').attr('id')+"']").closest('.nav-item').prev('.nav-item').find('.nav-link').tab('show');
                             });
                         })
